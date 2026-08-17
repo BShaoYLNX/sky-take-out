@@ -1,0 +1,7 @@
+datasource:
+  driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  host: localhost
+  port: 1433
+  database: sky_take_out
+  username: sa
+  password: 123456
