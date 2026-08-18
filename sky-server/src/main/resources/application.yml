@@ -9,9 +9,9 @@ spring:
   datasource:
     druid:
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      url: jdbc:sqlserver://${sky.datasource.host}:${sky.datasource.port};databaseName=${sky.datasource.database};encrypt=true;trustServerCertificate=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+      url: jdbc:sqlserver://localhost:1433;databaseName=sky_take_out;encrypt=true;trustServerCertificate=true
+      username: sa
+      password: 123
 
 mybatis:
   #mapper配置文件
