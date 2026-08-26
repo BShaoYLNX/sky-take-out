@@ -11,4 +11,11 @@
         </foreach>
     </insert>
 
+    <select id="getByDishId" resultType="com.sky.entity.DishFlavor">
+        SELECT * FROM dish_flavor WHERE dish_id = #{dishId}
+    </select>
+
+    <delete id="deleteByDishId">
+        DELETE FROM dish_flavor WHERE dish_id = #{dishId}
+    </delete>
 </mapper>

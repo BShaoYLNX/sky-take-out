@@ -15,4 +15,15 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="listByType" resultType="com.sky.entity.Category">
+        SELECT *
+        FROM category
+        <where>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        </where>
+        ORDER BY sort ASC, create_time DESC
+    </select>
 </mapper>

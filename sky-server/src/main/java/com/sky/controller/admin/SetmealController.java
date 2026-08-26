@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 套餐管理
  */
@@ -21,9 +23,15 @@ import org.springframework.web.bind.annotation.*;
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
-    /**
-     * 套餐分页查询
-     */
+
+    @PostMapping
+    @ApiOperation("新增套餐")
+    public Result addSetmeal(@RequestBody SetmealDTO setmealDTO) {
+        log.info("新增套餐：{}", setmealDTO);
+        setmealService.addSetmeal(setmealDTO);
+        return Result.success();
+    }
+
     @GetMapping("/page")
     @ApiOperation("套餐分页查询")
     public Result<PageResult> pageQuery(SetmealPageQueryDTO pageQueryDTO) {
@@ -31,11 +39,41 @@ public class SetmealController {
         PageResult pageResult = setmealService.pageQuery(pageQueryDTO);
         return Result.success(pageResult);
     }
-    @PostMapping
-    @ApiOperation("新增套餐")
-    public Result addSetmeal(@RequestBody SetmealDTO setmealDTO) {
-        log.info("新增套餐：{}", setmealDTO);
-        setmealService.addSetmeal(setmealDTO);
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据ID查询套餐详情")
+    public Result<SetmealDTO> getById(@PathVariable Long id) {
+        log.info("查询套餐详情，id={}", id);
+        SetmealDTO dto = setmealService.getByIdWithDishes(id);
+        return Result.success(dto);
+    }
+
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result updateSetmeal(@RequestBody SetmealDTO setmealDTO) {
+        log.info("修改套餐：{}", setmealDTO);
+        setmealService.updateSetmeal(setmealDTO);
+        return Result.success();
+    }
+
+    /**
+     * 删除套餐
+     * @param
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("删除套餐")
+    public Result deleteSetmeal(@RequestParam List<Long> ids) {
+        log.info("删除套餐，ids={}", ids);
+        setmealService.deleteSetmeal(ids);
+        return Result.success();
+    }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("启停售套餐")
+    public Result startOrStop(@PathVariable Integer status, @RequestParam Long id) {
+        log.info("启停售套餐，id={}, status={}", id, status);
+        setmealService.startOrStop(id, status);
         return Result.success();
     }
 }

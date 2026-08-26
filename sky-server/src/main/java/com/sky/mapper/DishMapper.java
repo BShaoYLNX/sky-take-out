@@ -20,4 +20,19 @@ public interface DishMapper {
     List<DishVO> pageQuery(@Param("name") String name,
                            @Param("categoryId") Integer categoryId,
                            @Param("status") Integer status);
+
+    /**
+     * 根据ID查询菜品
+     */
+    Dish getById(Long id);
+
+    /**
+     * 更新菜品（动态更新）
+     */
+    void update(Dish dish);
+
+    /**
+     * 根据分类ID查询菜品列表
+     */
+    List<Dish> getByCategoryId(Long categoryId);
 }

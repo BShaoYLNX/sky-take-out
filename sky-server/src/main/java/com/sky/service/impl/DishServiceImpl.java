@@ -73,4 +73,65 @@ public class DishServiceImpl implements DishService {
         Page<DishVO> page = (Page<DishVO>) list;
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        //查询菜品基本信息
+        Dish dish = dishMapper.getById(id);
+        if (dish == null) {
+            throw new RuntimeException("菜品不存在");
+        }
+
+        //查询口味列表
+        List<DishFlavor> flavors = dishFlavorMapper.getByDishId(id);
+
+        //组装 VO
+        DishVO vo = new DishVO();
+        BeanUtils.copyProperties(dish, vo);
+        vo.setFlavors(flavors);
+        return vo;
+    }
+
+    @Override
+    //没成功回滚
+    @Transactional
+    public void updateDish(DishDTO dishDTO) {
+        // 判断ID是否存在
+        if (dishDTO.getId() == null) {
+            throw new RuntimeException("菜品ID不能为空");
+        }
+
+        // DTO 转 Entity（菜品基本信息）
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        // 补全系统字段
+        dish.setUpdateTime(LocalDateTime.now());
+        dish.setUpdateUser(BaseContext.getCurrentId());
+
+        // 更新菜品基本信息
+        dishMapper.update(dish);
+
+        // 处理口味：先删除原口味，再插入新口味
+        Long dishId = dishDTO.getId();
+        // 删除原口味
+        dishFlavorMapper.deleteByDishId(dishId);
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && !flavors.isEmpty()) {
+            // 设置每个口味的 dishId
+            flavors.forEach(flavor -> flavor.setDishId(dishId));
+            // 批量插入新口味
+            dishFlavorMapper.insertBatch(flavors);
+        }
+    }
+    /**
+     * 根据分类ID查询菜品列表
+     * @param categoryId 分类ID
+     * @return 菜品列表
+     */
+    @Override
+    public List<Dish> getByCategoryId(Long categoryId) {
+        return dishMapper.getByCategoryId(categoryId);
+    }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.mapper.SetmealDishMapper">
+    <resultMap id="SetmealDishMap" type="com.sky.entity.SetmealDish">
+        <id property="id" column="id"/>
+        <result property="setmealId" column="setmeal_id"/>
+        <result property="dishId" column="dish_id"/>
+        <result property="copies" column="copies"/>
+        <result property="name" column="dish_name"/>
+        <result property="price" column="dish_price"/>
+    </resultMap>
+
+    <insert id="insertBatch">
+        INSERT INTO setmeal_dish (setmeal_id, dish_id, copies)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.setmealId}, #{item.dishId}, #{item.copies})
+        </foreach>
+    </insert>
+
+    <delete id="deleteBySetmealIds">
+        DELETE FROM setmeal_dish WHERE setmeal_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getBySetmealId" resultMap="SetmealDishMap">
+        SELECT
+            sd.id,
+            sd.setmeal_id,
+            sd.dish_id,
+            sd.copies,
+            d.name AS dish_name,
+            d.price AS dish_price
+        FROM setmeal_dish sd
+                 LEFT JOIN dish d ON sd.dish_id = d.id
+        WHERE sd.setmeal_id = #{setmealId}
+    </select>
+
+</mapper>

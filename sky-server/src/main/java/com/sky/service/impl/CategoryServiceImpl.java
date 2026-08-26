@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 分类分页操作实现类
@@ -86,5 +87,15 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteCategory(Long id) {
         categoryMapper.deleteCategory(id);
+    }
+
+    /**
+     * 根据类型查询分类列表
+     * @param type 类型：1-菜品分类，2-套餐分类
+     * @return
+     */
+    @Override
+    public List<Category> listByType(Integer type) {
+        return categoryMapper.listByType(type);
     }
 }
