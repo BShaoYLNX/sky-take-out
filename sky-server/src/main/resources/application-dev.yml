@@ -11,3 +11,11 @@ sky:
     access-key-id: LTAI5tA5PArkkcHWcVC7SRg5
     access-key-secret: emb8b6Q1OrbgYUASHpziQUjOTRaD8U
     bucket-name: ylnx-sky-take-out
+  redis:
+    home: localhost
+    password: 123456
+    port: 6379
+    database: 0
+  wechat:
+    appid: wx6f9008ccd4806520
+    secret: bf9518fcf18502e249801dd2fd66c826
