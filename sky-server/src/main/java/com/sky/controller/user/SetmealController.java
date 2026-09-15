@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class SetmealController {
     }
 
     @GetMapping("/{id}")
+    @Cacheable(cacheNames = "setMealCache", key = "#id")
     @ApiOperation("根据ID查询套餐详情（含关联菜品）")
     public Result<SetmealDTO> getById(@PathVariable Long id) {
         log.info("查询套餐详情，id={}", id);
